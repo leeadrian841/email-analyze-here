@@ -1,4 +1,4 @@
-# Email Threat Analysis Platform
+# Email Analyze Here
 
 A **fully client-side** web app for email forensic triage. Upload an `.eml` file, or
 paste raw email headers / a full email, and get a structured threat report:
@@ -11,13 +11,12 @@ hosted as static files on GitHub Pages.
 
 ## Why client-side?
 
-The original design notes (`CLAUDE.md`) describe a Python/FastAPI backend with a
-database and third-party enrichment APIs. GitHub Pages only serves **static files**,
+GitHub Pages only serves **static files**,
 so none of that can run there. This implementation moves the entire analysis pipeline
 — parsing, authentication interpretation, the detection-pattern library, IOC
 extraction, severity scoring, and report rendering — into vanilla JavaScript that
 executes in the visitor's browser. The trade-off: no live DNS/WHOIS/VirusTotal
-enrichment (those need a server or API keys). Everything else from the spec is here.
+enrichment (those need a server or API keys).
 
 ## Features
 
@@ -47,41 +46,6 @@ It's static — any web server works. ES modules require `http://`, not `file://
 python -m http.server 8137
 # then open http://localhost:8137
 ```
-
-## Deploy to GitHub Pages
-
-1. Create a repo and push these files to the **root** of the `main` branch:
-   ```bash
-   git init
-   git add .
-   git commit -m "Email Threat Analysis Platform"
-   git branch -M main
-   git remote add origin https://github.com/<you>/<repo>.git
-   git push -u origin main
-   ```
-2. On GitHub: **Settings → Pages → Build and deployment**, then pick one source:
-   - **GitHub Actions** (recommended) — uses the included
-     [`.github/workflows/deploy.yml`](.github/workflows/deploy.yml), which publishes
-     the repo root to Pages automatically on every push to `main`.
-   - **Deploy from a branch** — set **Branch = `main` / `(root)`** and skip the workflow.
-3. Wait ~1 minute. Your site is live at
-   `https://<you>.github.io/<repo>/`.
-
-The included `.nojekyll` file tells Pages to serve the `assets/` folder as-is
-(no Jekyll processing). No build step is required.
-
-## Automation (CI/CD & dependency updates)
-
-- **GitHub Actions** — [`.github/workflows/deploy.yml`](.github/workflows/deploy.yml)
-  deploys the static site to GitHub Pages on every push to `main` (and on demand via
-  *Run workflow*). It's the canonical Pages action chain: `configure-pages` →
-  `upload-pages-artifact` → `deploy-pages`. Requires Pages **Source = GitHub Actions**.
-- **Dependabot** — [`.github/dependabot.yml`](.github/dependabot.yml) runs weekly.
-  This site has no npm/pip dependencies, so the only thing with versions to track is
-  the workflow itself; Dependabot watches the `github-actions` ecosystem and opens PRs
-  to bump the pinned action versions (e.g. `actions/checkout`) when updates or security
-  fixes ship. Add more `package-ecosystem` blocks there if you later introduce a
-  package manifest.
 
 ## Project structure
 
