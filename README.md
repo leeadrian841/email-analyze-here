@@ -59,19 +59,39 @@ python -m http.server 8137
    git remote add origin https://github.com/<you>/<repo>.git
    git push -u origin main
    ```
-2. On GitHub: **Settings → Pages → Build and deployment**.
-   Set **Source = Deploy from a branch**, **Branch = `main` / `(root)`**, save.
+2. On GitHub: **Settings → Pages → Build and deployment**, then pick one source:
+   - **GitHub Actions** (recommended) — uses the included
+     [`.github/workflows/deploy.yml`](.github/workflows/deploy.yml), which publishes
+     the repo root to Pages automatically on every push to `main`.
+   - **Deploy from a branch** — set **Branch = `main` / `(root)`** and skip the workflow.
 3. Wait ~1 minute. Your site is live at
    `https://<you>.github.io/<repo>/`.
 
 The included `.nojekyll` file tells Pages to serve the `assets/` folder as-is
 (no Jekyll processing). No build step is required.
 
+## Automation (CI/CD & dependency updates)
+
+- **GitHub Actions** — [`.github/workflows/deploy.yml`](.github/workflows/deploy.yml)
+  deploys the static site to GitHub Pages on every push to `main` (and on demand via
+  *Run workflow*). It's the canonical Pages action chain: `configure-pages` →
+  `upload-pages-artifact` → `deploy-pages`. Requires Pages **Source = GitHub Actions**.
+- **Dependabot** — [`.github/dependabot.yml`](.github/dependabot.yml) runs weekly.
+  This site has no npm/pip dependencies, so the only thing with versions to track is
+  the workflow itself; Dependabot watches the `github-actions` ecosystem and opens PRs
+  to bump the pinned action versions (e.g. `actions/checkout`) when updates or security
+  fixes ship. Add more `package-ecosystem` blocks there if you later introduce a
+  package manifest.
+
 ## Project structure
 
 ```
 index.html              # page shell
 .nojekyll               # disable Jekyll on GitHub Pages
+.gitignore              # keeps local dev config out of the repo
+.github/
+  workflows/deploy.yml  # GitHub Actions → deploy to Pages
+  dependabot.yml        # weekly action-version update checks
 assets/
   css/styles.css        # dark security-console theme + print styles
   js/
