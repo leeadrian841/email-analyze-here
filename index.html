@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Email Analyze Here</title>
+  <meta name="description" content="Upload an .eml file or paste raw email headers for in-browser forensic threat analysis — phishing, BEC, sextortion, and advance-fee fraud detection. Nothing leaves your device." />
+  <link rel="stylesheet" href="assets/css/styles.css" />
+  <link rel="icon" href="data:image/svg+xml,&lt;svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'&gt;&lt;text y='.9em' font-size='90'&gt;🛡️&lt;/text&gt;&lt;/svg&gt;" />
+</head>
+<body>
+  <header class="site-header">
+    <div class="wrap header-inner">
+      <div class="brand">
+        <span class="brand-mark">⛨</span>
+        <div>
+          <h1 class="brand-title">Email Analyze Here</h1>
+          <p class="brand-sub">Forensic email triage</p>
+        </div>
+      </div>
+      <div class="privacy-pill" title="All parsing and analysis run locally in your browser. No upload, no server, no tracking.">
+        <span class="dot"></span> 100% in-browser · nothing is uploaded
+      </div>
+    </div>
+  </header>
+
+  <main class="wrap">
+    <section class="intro">
+      <p>
+        Paste a full email (with headers), drop an <code>.eml</code> file, or load a sample.
+        The analyzer parses the message, evaluates SPF/DKIM/DMARC <em>in context</em>, runs a
+        library of attack-pattern detections, extracts indicators of compromise, and produces a
+        structured threat report — entirely on your machine.
+      </p>
+    </section>
+
+    <section class="input-panel card">
+      <div class="input-cols">
+        <div class="input-left">
+          <div id="dropzone" class="dropzone" tabindex="0" role="button" aria-label="Upload an .eml file">
+            <div class="dz-icon">⬆</div>
+            <div class="dz-text"><strong>Drop an .eml file</strong><span>or click to browse</span></div>
+            <input type="file" id="fileInput" accept=".eml,.txt,message/rfc822" hidden />
+          </div>
+          <div class="samples">
+            <span class="samples-label">Try a sample:</span>
+            <div id="sampleButtons" class="sample-buttons"></div>
+          </div>
+        </div>
+        <div class="input-right">
+          <label for="rawInput" class="ta-label">…or paste raw email / headers</label>
+          <textarea id="rawInput" spellcheck="false" placeholder="Paste the full email source here, including headers (From, To, Received, Authentication-Results, …).&#10;&#10;In Gmail: ⋮ → Show original → copy all.&#10;In Outlook: File → Properties → Internet headers."></textarea>
+        </div>
+      </div>
+      <div id="errorBox" class="error-box" hidden></div>
+      <div class="input-actions">
+        <button id="analyzeBtn" class="btn btn-primary" type="button">Analyze email</button>
+        <button id="clearBtn" class="btn btn-ghost" type="button">Clear</button>
+        <span class="kbd-hint">Ctrl/⌘ + Enter</span>
+      </div>
+    </section>
+
+    <section id="emptyState" class="empty-state">
+      <p>No report yet. Load a sample above to see what an analysis looks like.</p>
+    </section>
+
+    <section id="results" hidden>
+      <div class="results-toolbar">
+        <h2 class="results-heading">Threat Report</h2>
+        <div class="toolbar-actions">
+          <label class="redact-toggle" title="Replace the recipient address with [recipient] in the report and all exports.">
+            <input type="checkbox" id="redactToggle" /> Redact recipient
+          </label>
+          <button id="exportMd" class="btn btn-sm" type="button">Export .md</button>
+          <button id="exportJson" class="btn btn-sm" type="button">Export .json</button>
+          <button id="exportPdf" class="btn btn-sm" type="button">Print / PDF</button>
+        </div>
+      </div>
+      <div id="report"></div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="wrap">
+      <p>
+        Email Threat Analysis Platform — static, client-side, deployable to GitHub Pages.
+        Analysis is heuristic and educational; it complements, not replaces, professional incident response.
+      </p>
+      <p class="muted">No data is transmitted. Uploaded content stays in your browser tab and is discarded on reload.</p>
+    </div>
+  </footer>
+
+  <script type="module" src="assets/js/app.js"></script>
+</body>
+</html>
