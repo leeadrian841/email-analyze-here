@@ -1,0 +1,19 @@
+version: 2
+
+# This is a dependency-free, vanilla-JS static site — there is no npm/pip/etc.
+# manifest to monitor. The one thing that DOES have versioned dependencies is the
+# GitHub Actions workflow above (actions/checkout, actions/deploy-pages, …), so
+# Dependabot keeps those action pins up to date and opens PRs when newer releases
+# (including security fixes) are available.
+updates:
+  - package-ecosystem: "github-actions"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+    open-pull-requests-limit: 5
+    commit-message:
+      prefix: "ci"
+    labels:
+      - "dependencies"
+      - "github-actions"
+
